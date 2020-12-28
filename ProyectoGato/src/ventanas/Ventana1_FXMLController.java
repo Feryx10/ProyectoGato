@@ -22,6 +22,8 @@ import javafx.scene.control.Label;
 public class Ventana1_FXMLController implements Initializable {
     
     final ArrayList<Partida> partidas = new ArrayList<>();
+    private Partida partidaGuia;
+    private boolean generandoPuntajes=true;
     
     @FXML
     private Label label;    
@@ -308,10 +310,18 @@ public class Ventana1_FXMLController implements Initializable {
             }
         }
         if (bestBet==null) {
-            System.out.println("Derrota");
+         //   System.out.println("Derrota / Empate");
         }
         else
+        {
+            if (generandoPuntajes) {
+                bestBet=partidas.get(new Random().nextInt(partidas.size()-1));
+            }
             avanzarEstado(bestBet);
+            this.partidaGuia=bestBet;
+        }
+            
+            
     }
     
     private boolean esEstadoIgual(Partida partida)
@@ -411,20 +421,28 @@ public class Ventana1_FXMLController implements Initializable {
         this.b8.setDisable(false);      
     }
     
-    private void generarPuntajes(Partida partida)
+    private void generarPuntajes()
     {
-        int puntaje = 9;
+        
         int estadoTablero;
-        for (int i = 0; i < 10; i++) {
-            this.seleccionIA();
-            estadoTablero=verificarFinJuego();
-            if (estadoTablero==0) {
-                partida.setPuntaje(partida.getPuntaje()+puntaje);
-            }
-            else if (estadoTablero==1) {
+        for (int i = 0; i < 100000; i++) {
+            int puntaje = 9;
+            do
+            {
+                this.seleccionIA();
+                estadoTablero=verificarFinJuego();
+                if (estadoTablero==0) {
+                    partidaGuia.setPuntaje(partidaGuia.getPuntaje()+puntaje);
+                  //  System.out.println("victoria: "+partidaGuia.getPuntaje());
+                }
+                else if (estadoTablero==2) {
+                    this.seleccionIARandom();
+                }
                 
-            }
-            this.seleccionIARandom();
+                puntaje--;     
+            }while(estadoTablero==2);
+            borrarTablero();
+                   
         }
     }
     
@@ -439,75 +457,77 @@ public class Ventana1_FXMLController implements Initializable {
     
     private int verificarFinJuego()
     {
-        if (tableroCompletado()) {
-            return 1;
-        }
         // 0 = victoria, 1 = derrota/empate, 2 = sigue el juego
-        if(this.b0.equals("x") && this.b1.equals("x") && this.b2.equals("x"))
+        if(this.b0.getText().equals("x") && this.b1.getText().equals("x") && this.b2.getText().equals("x"))
         {
             return 0;
         }
-        if(this.b3.equals("x") && this.b4.equals("x") && this.b5.equals("x"))
+        if(this.b3.getText().equals("x") && this.b4.getText().equals("x") && this.b5.getText().equals("x"))
         {
             return 0;
         }
-        if(this.b6.equals("x") && this.b7.equals("x") && this.b8.equals("x"))
+        if(this.b6.getText().equals("x") && this.b7.getText().equals("x") && this.b8.getText().equals("x"))
         {
             return 0;
         }
-        if(this.b0.equals("x") && this.b3.equals("x") && this.b6.equals("x"))
+        if(this.b0.getText().equals("x") && this.b3.getText().equals("x") && this.b6.getText().equals("x"))
         {
             return 0;
         }
-        if(this.b1.equals("x") && this.b4.equals("x") && this.b7.equals("x"))
+        if(this.b1.getText().equals("x") && this.b4.getText().equals("x") && this.b7.getText().equals("x"))
         {
             return 0;
         }
-        if(this.b2.equals("x") && this.b5.equals("x") && this.b8.equals("x"))
+        if(this.b2.getText().equals("x") && this.b5.getText().equals("x") && this.b8.getText().equals("x"))
         {
             return 0;
         }
-        if(this.b0.equals("x") && this.b4.equals("x") && this.b8.equals("x"))
+        if(this.b0.getText().equals("x") && this.b4.getText().equals("x") && this.b8.getText().equals("x"))
         {
             return 0;
         }
-        if(this.b6.equals("x") && this.b4.equals("x") && this.b2.equals("x"))
+        if(this.b6.getText().equals("x") && this.b4.getText().equals("x") && this.b2.getText().equals("x"))
         {
             return 0;
         }
         
-        if(this.b0.equals("o") && this.b1.equals("o") && this.b2.equals("o"))
+        if (tableroCompletado()) {
+            return 1;
+        }
+        
+        if(this.b0.getText().equals("o") && this.b1.getText().equals("o") && this.b2.getText().equals("o"))
         {
             return 1;
         }
-        if(this.b3.equals("o") && this.b4.equals("o") && this.b5.equals("o"))
+        if(this.b3.getText().equals("o") && this.b4.getText().equals("o") && this.b5.getText().equals("o"))
         {
             return 1;
         }
-        if(this.b6.equals("o") && this.b7.equals("o") && this.b8.equals("o"))
+        if(this.b6.getText().equals("o") && this.b7.getText().equals("o") && this.b8.getText().equals("o"))
         {
             return 1;
         }
-        if(this.b0.equals("o") && this.b3.equals("o") && this.b6.equals("o"))
+        if(this.b0.getText().equals("o") && this.b3.getText().equals("o") && this.b6.getText().equals("o"))
         {
             return 1;
         }
-        if(this.b1.equals("o") && this.b4.equals("o") && this.b7.equals("o"))
+        if(this.b1.getText().equals("o") && this.b4.getText().equals("o") && this.b7.getText().equals("o"))
         {
             return 1;
         }
-        if(this.b2.equals("o") && this.b5.equals("o") && this.b8.equals("o"))
+        if(this.b2.getText().equals("o") && this.b5.getText().equals("o") && this.b8.getText().equals("o"))
         {
             return 1;
         }
-        if(this.b0.equals("o") && this.b4.equals("o") && this.b8.equals("o"))
+        if(this.b0.getText().equals("o") && this.b4.getText().equals("o") && this.b8.getText().equals("o"))
         {
             return 1;
         }
-        if(this.b6.equals("o") && this.b4.equals("o") && this.b2.equals("o"))
+        if(this.b6.getText().equals("o") && this.b4.getText().equals("o") && this.b2.getText().equals("o"))
         {
             return 1;
         }
+        
         
         return 2;
         
@@ -534,10 +554,14 @@ public class Ventana1_FXMLController implements Initializable {
             fileReader.close();
         } catch (IOException ex) {
             System.out.println("¡ No Existen Datos !");
+        }       
+        this.generarPuntajes();
+        System.out.println("Putajes Generados");
+        this.generandoPuntajes=false;
+        this.borrarTablero();
+        for (int i = 0; i < partidas.size(); i++) {
+            //System.out.println(partidas.get(i).getPuntaje());
         }
-        
-        
-        
         this.seleccionIA();
     }    
     
