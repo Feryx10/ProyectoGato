@@ -421,7 +421,7 @@ public class Ventana1_FXMLController implements Initializable {
         this.b8.setDisable(false);      
     }
     
-    private void generarPuntajes()
+    private void generarPuntajes()  //Generate points
     {
         
         int estadoTablero;
@@ -430,18 +430,18 @@ public class Ventana1_FXMLController implements Initializable {
             do
             {
                 this.seleccionIA();
-                estadoTablero=verificarFinJuego();
+                estadoTablero=verificarFinJuego();  //// 0 = victory, 1 = lost/tie, 2 = keeps playing
                 if (estadoTablero==0) {
-                    partidaGuia.setPuntaje(partidaGuia.getPuntaje()+puntaje);
+                    partidaGuia.setPuntaje(partidaGuia.getPuntaje()+puntaje);   //Sets points to winning solution
                   //  System.out.println("victoria: "+partidaGuia.getPuntaje());
                 }
                 else if (estadoTablero==2) {
-                    this.seleccionIARandom();
+                    this.seleccionIARandom();     //Selects random rival
                 }
                 
                 puntaje--;     
             }while(estadoTablero==2);
-            borrarTablero();
+            borrarTablero();                     //Restart table
                    
         }
     }
@@ -555,6 +555,7 @@ public class Ventana1_FXMLController implements Initializable {
         } catch (IOException ex) {
             System.out.println("¡ No Existen Datos !");
         }       
+        System.out.println("Generando puntajes, por favor espere");
         this.generarPuntajes();
         System.out.println("Putajes Generados");
         this.generandoPuntajes=false;
